@@ -1,0 +1,22 @@
+// use prisma-next
+
+model Ticket {
+  id          Int               @id @default(autoincrement())
+  title       String
+  description String
+  category    String            @default("Other")
+  priority    String
+  status      String            @default("Open")
+  requester   String            @default("Anonymous")
+  assignee    String?
+  createdAt   TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
+}
+
+model Comment {
+  id        Int               @id @default(autoincrement())
+  ticketId  Int
+  author    String
+  message   String
+  createdAt TimestamptzString @default(now())
+}
