@@ -1,22 +1,22 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { Ticket } from '../types/Ticket';
+import { API_URL } from '../config';
 import './Dashboard.css';
-
-const API_URL = 'http://localhost:5000/api/tickets';
 
 const Dashboard: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Load real tickets from the API
   useEffect(() => {
     const loadTickets = async () => {
       try {
         setLoading(true);
         setError('');
 
-        const response = await fetch(API_URL);
+        const response = await fetch(
+          `${API_URL}/api/tickets`
+        );
 
         if (!response.ok) {
           throw new Error('Failed to load tickets');
@@ -36,7 +36,6 @@ const Dashboard: React.FC = () => {
     loadTickets();
   }, []);
 
-  // Calculate real dashboard statistics
   const summaryData = useMemo(() => {
     const openTickets = tickets.filter(
       (ticket) => ticket.status === 'Open'
@@ -70,7 +69,6 @@ const Dashboard: React.FC = () => {
     ];
   }, [tickets]);
 
-  // Show the 5 newest tickets
   const recentTickets = useMemo(() => {
     return [...tickets]
       .sort(
@@ -105,7 +103,10 @@ const Dashboard: React.FC = () => {
 
       <div className="summary-cards">
         {summaryData.map((data) => (
-          <div key={data.title} className="card">
+          <div
+            key={data.title}
+            className="card"
+          >
             <h2>{data.title}</h2>
             <p>{data.value}</p>
           </div>
